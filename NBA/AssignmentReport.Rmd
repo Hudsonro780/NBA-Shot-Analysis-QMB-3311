@@ -101,14 +101,16 @@ shots_data["POINT_VALUE"] = shots_data["SHOT_TYPE"].apply(
 
 The data set of nbaShots05_06.csv is actively tracking each shot attempt throughout the regular season by players in an instance form. There are several things captured in the dataset, notated by the column names.
 
-```{r echo=FALSE}
+```{r}
 
 library(readxl)
+library(kableExtra)
+options(max.print = 500)
 
-df <- read_excel("C:/Users/Rober/Desktop/Python Projects/NBA Shot Analysis QMB 3311/nba_shot_col_mapping.xlsx")
+df <- data.frame(read_excel("C:/Users/Rober/Desktop/Python Projects/NBA Shot Analysis QMB 3311/analysis/nba_shot_col_mapping.xlsx",col_names = c('Column Name','Column Description')))
 
 
-print(df)
+kable(df)
 ```
 
 ## Summary Statistics
@@ -139,7 +141,7 @@ print(zone_eps.to_string(index=False, float_format="%.3f"),'\n') # summary of th
 
 This is visualized here:
 
-![*Figure 1: Expected Points per Shot in Zones*](images/zone_eps.png)
+![*Expected Points per Shot in Zones*](images/zone_eps.png)
 
 The mid range 2 point shot is classified as the Mid Range and the In The Paint (Non-RA). Evidently, they provide much less expected return, likely due to closer defenders, bunched formations, and more complex shot angles. In contrast, the higher likllihood of the near the rim dunks and layups significantly increased its value in comparison. While still only a 60% clip, the near rim shot is the vastly superior 2 pointer.
 
@@ -183,15 +185,15 @@ print(
 )
 ```
 
-The regression model yielded some interesting results as it did not directly match the hypothesis. Instead it opened further questions. There was a correlation between the wins and shot efficiency; however some teams that used a mid of the table shot efficiency had the most regular season wins: The Pistons, Mavericks, and the Spurs. The Phoenix Suns used a high rate of three point shots to generate their EPS and the Miami Heat used a mix of play around the hoop and threes to keep the second highest value.
+The regression model yielded some interesting results as it did not directly match the hypothesis. Instead it opened further questions. There was a correlation between the wins and shot efficiency; however some teams that used a mid of the table shot efficiency had the most regular season wins: The Pistons, Mavericks, and the Spurs. The Phoenix Suns used a high rate of three point shots to generate their EPS and the Miami Heat used a mix of play around the hoop and threes to keep the second highest value. As shown in Figure 2.
 
-![*Figure 2: Regression Model*](images/regression.png)
+![*Regression Model*](images/regression.png)
 
 ## External Factors
 
-There are several external factors not considered in this single data file. These include statistics such as rebounds, free throw percentages, or even the number of free throws per team. The last one is significant because two point attempts are much more likely to result in a free throw than a three pointer. The increase of the expected points value of the 2 point shots are not included here. I would need the foul event data and be able to connect between the shot event and the foul event to make the connection. I did make a visual showing each team's shot type rates, and it showed higher 2 point attempt rates for some of the outperforming teams, lending some credence to the free throw hypothesis.
+There are several external factors not considered in this single data file. These include statistics such as rebounds, free throw percentages, or even the number of free throws per team. The last one is significant because two point attempts are much more likely to result in a free throw than a three pointer. The increase of the expected points value of the 2 point shots are not included here. I would need the foul event data and be able to connect between the shot event and the foul event to make the connection. I did make a visual showing each team's shot type rates, and it showed higher 2 point attempt rates for some of the outperforming teams, lending some credence to the free throw hypothesis. As shown in Figure 3.
 
-![*Figure 3: Shot Type by Team*](images/team_zone_distribution-03.png)
+![*Shot Type by Team*](images/team_zone_distribution-03.png)
 
 ## Other Notes
 

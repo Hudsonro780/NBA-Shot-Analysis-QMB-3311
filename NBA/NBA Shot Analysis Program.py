@@ -125,7 +125,7 @@ zone_eps["fg_pct"] = zone_eps["makes"] / zone_eps["attempts"]
 zone_eps["eps"] = zone_eps["fg_pct"] * zone_eps["avg_point_value"]
 zone_eps = zone_eps.sort_values("eps", ascending=False)
 
-print(zone_eps.to_string(index=False, float_format="%.3f")) # summary of the EPS calculated
+print(zone_eps.to_string(index=False, float_format="%.3f"),'\n') # summary of the EPS calculated
 
 
 

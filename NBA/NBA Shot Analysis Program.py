@@ -43,53 +43,19 @@ os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 
 # ---- Ingest System ----
-script_dir = os.path.dirname(os.path.abspath(__file__)) #using same file dir as the scripting
-local_csvs = [f for f in os.listdir(script_dir) if f.lower().endswith(".csv")]
+#script_dir = os.path.dirname(os.path.abspath(__file__)) #using same file dir as the scripting
+#local_csvs = [f for f in os.listdir(script_dir) if f.lower().endswith(".csv")]
 
-csv_file = os.path.join(script_dir, local_csvs[0]) #R function I use to join basename and the folder path
-shots_data = pd.read_csv(csv_file)
+#csv_file = os.path.join(script_dir, local_csvs[0]) #R function I use to join basename and the folder path
+#shots_data = pd.read_csv(csv_file)
+
+# changed to direct pathing to prevent the csv search from returning two files and erroring out.
+shots_data = pd.read_csv(r"C:\Users\Rober\Desktop\Coding Projects\Work\NBA Shot Analysis QMB 3311\NBA\nbaShots05_06.csv")
 
 # ---- Manual Record Dataframe ----
 # created df for team records
-# got lazy - didn't want to specify filepaths and since csv reader could only handle one...
-records = pd.DataFrame({
-    "TEAM_NAME": [
-        "Detroit Pistons",
-        "San Antonio Spurs",
-        "Dallas Mavericks",
-        "Phoenix Suns",
-        "Miami Heat",
-        "Cleveland Cavaliers",
-        "Memphis Grizzlies",
-        "New Jersey Nets",
-        "Los Angeles Clippers",
-        "Los Angeles Lakers",
-        "Denver Nuggets",
-        "Sacramento Kings",
-        "Washington Wizards",
-        "Chicago Bulls",
-        "Indiana Pacers",
-        "Utah Jazz",
-        "Milwaukee Bucks",
-        "New Orleans/Oklahoma City Hornets",
-        "Philadelphia 76ers",
-        "Orlando Magic",
-        "Seattle SuperSonics",
-        "Golden State Warriors",
-        "Houston Rockets",
-        "Boston Celtics",
-        "Minnesota Timberwolves",
-        "Toronto Raptors",
-        "Atlanta Hawks",
-        "Charlotte Bobcats",
-        "New York Knicks",
-        "Portland Trail Blazers",
-    ],
-    "Wins": [64, 63, 60, 54, 52, 50, 49, 49, 47, 45, 44, 44, 42, 41, 41,
-             41, 40, 38, 38, 36, 35, 34, 34, 33, 33, 27, 26, 26, 23, 21],
-    "Losses": [18, 19, 22, 28, 30, 32, 33, 33, 35, 37, 38, 38, 40, 41, 41,
-               41, 42, 44, 44, 46, 47, 48, 48, 49, 49, 55, 56, 56, 59, 61],
-})
+# changing ingest away from working directory. simpler for the two files.
+records = pd.read_excel(r"C:\Users\Rober\Desktop\Coding Projects\Work\NBA Shot Analysis QMB 3311\NBA\nbaRecords05_06.xlsx")
 
 print(records.to_string(index=False),'\n')
 
@@ -133,7 +99,7 @@ print(zone_eps.to_string(index=False, float_format="%.3f"),'\n') # summary of th
 # comparing to true record
 
 team_season_eps = (
-    shots_data.groupby("TEAM_NAME")
+    shots_data.groupby("Team_name")
     .agg(
         attempts=("SHOT_ATTEMPTED_FLAG", "sum"),
         makes=("SHOT_MADE_FLAG", "sum"),
@@ -149,10 +115,10 @@ team_season_eps["eps"] = team_season_eps["fg_pct"] * team_season_eps["avg_point_
 
 # ---- Compare aggregated eps to record wins. ----
 
-regression_df = team_season_eps.merge(records, on="TEAM_NAME", how="inner")
+regression_df = team_season_eps.merge(records, on="Team_name", how="inner")
 
 print(
-    regression_df[["TEAM_NAME", "Wins", "Losses", "fg_pct", "eps", "attempts", "avg_distance"]]
+    regression_df[["Team_name", "Wins", "Losses", "fg_pct", "eps", "attempts", "avg_distance"]]
     .sort_values("Wins", ascending=False)
     .to_string(index=False, float_format="%.3f")
 )
@@ -224,7 +190,7 @@ ax.plot(x_line, y_line, color="red", linewidth=2.5, linestyle="--")
 # Team names over their respective points
 for _, row in regression_df.iterrows():
     ax.annotate(
-        row["TEAM_NAME"],
+        row["Team_name"],
         (row["eps"], row["Wins"]),
         fontsize=7,
         ha="center",

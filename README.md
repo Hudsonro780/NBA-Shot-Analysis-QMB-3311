@@ -1,4 +1,4 @@
-This project is for an assingment in QMB 3311:
+This project is for an assignment in QMB 3311:
 
 Performing preliminary analysis on NBA Shot data from NBA Season 2005-2006
 

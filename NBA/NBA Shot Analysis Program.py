@@ -55,7 +55,7 @@ shots_data = pd.read_csv(r"C:\Users\Rober\Desktop\Coding Projects\Work\NBA Shot 
 # ---- Manual Record Dataframe ----
 # created df for team records
 # changing ingest away from working directory. simpler for the two files.
-records = pd.read_excel(r"C:\Users\Rober\Desktop\Coding Projects\Work\NBA Shot Analysis QMB 3311\NBA\nbaRecords05_06.xlsx")
+records = pd.read_csv(r"C:\Users\Rober\Desktop\Coding Projects\Work\NBA Shot Analysis QMB 3311\NBA\nbaRecords05_06.csv")
 
 print(records.to_string(index=False),'\n')
 
@@ -99,7 +99,7 @@ print(zone_eps.to_string(index=False, float_format="%.3f"),'\n') # summary of th
 # comparing to true record
 
 team_season_eps = (
-    shots_data.groupby("Team_name")
+    shots_data.groupby("TEAM_NAME")
     .agg(
         attempts=("SHOT_ATTEMPTED_FLAG", "sum"),
         makes=("SHOT_MADE_FLAG", "sum"),
@@ -115,10 +115,10 @@ team_season_eps["eps"] = team_season_eps["fg_pct"] * team_season_eps["avg_point_
 
 # ---- Compare aggregated eps to record wins. ----
 
-regression_df = team_season_eps.merge(records, on="Team_name", how="inner")
+regression_df = team_season_eps.merge(records, on="TEAM_NAME", how="inner")
 
 print(
-    regression_df[["Team_name", "Wins", "Losses", "fg_pct", "eps", "attempts", "avg_distance"]]
+    regression_df[["TEAM_NAME", "Wins", "Losses", "fg_pct", "eps", "attempts", "avg_distance"]]
     .sort_values("Wins", ascending=False)
     .to_string(index=False, float_format="%.3f")
 )
@@ -190,7 +190,7 @@ ax.plot(x_line, y_line, color="red", linewidth=2.5, linestyle="--")
 # Team names over their respective points
 for _, row in regression_df.iterrows():
     ax.annotate(
-        row["Team_name"],
+        row["TEAM_NAME"],
         (row["eps"], row["Wins"]),
         fontsize=7,
         ha="center",

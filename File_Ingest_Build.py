@@ -69,7 +69,9 @@ missed_shots = len(Master_File) - made_shots
 most_attempts = Master_File.groupby('PLAYER_NAME').size().idxmax()
 
 total_percent = round((made_shots/(event_count))*100,2)
+total_percent_v2 = Master_File['SHOT_MADE_FLAG'].mean()*100
 print("Robert Hudson, The total field goal percentage = ", total_percent,"%.\n")
+print("Using SHOT_MADE_FLAG: ", total_percent_v2, "%.\n")
 
 shot_percent = Master_File.groupby('PLAYER_NAME')['EVENT_TYPE'].apply(lambda x: (x=="Yes").mean()*100)
 

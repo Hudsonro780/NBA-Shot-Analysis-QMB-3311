@@ -68,7 +68,15 @@ made_shots = len(Master_File[Master_File['EVENT_TYPE'] == "Made Shot"])
 missed_shots = len(Master_File) - made_shots
 most_attempts = Master_File.groupby('PLAYER_NAME').size().idxmax()
 
-Master_File.to_csv(os.path.join(output, "Master_NBA.csv"))
+total_percent = round((made_shots/(event_count))*100,2)
+print("Robert Hudson, The total field goal percentage = ", total_percent,"%.\n")
+
+shot_percent = Master_File.groupby('PLAYER_NAME')['EVENT_TYPE'].apply(lambda x: (x=="Yes").mean()*100)
+
+# Note total shooting percentage for the data is ~45.4%
+
+# Not needed anymore
+# Master_File.to_csv(os.path.join(output, "Master_NBA.csv"))
 
 print("\n------------ File is created ---------------\n\nThere were ", event_count, " Shot attempts.")
 print("\nThere were ", made_shots,"made.\nThere were ", missed_shots,"missed.\n\nThe trigger happy shooter was", most_attempts,".\n\n-----------------------")

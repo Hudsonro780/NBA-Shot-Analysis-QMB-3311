@@ -82,3 +82,17 @@ shot_percent = Master_File.groupby('PLAYER_NAME')['EVENT_TYPE'].apply(lambda x: 
 
 print("\n------------ File is created ---------------\n\nThere were ", event_count, " Shot attempts.")
 print("\nThere were ", made_shots,"made.\nThere were ", missed_shots,"missed.\n\nThe trigger happy shooter was", most_attempts,".\n\n-----------------------")
+
+# shot percent by shot type
+shot_type_percent = Master_File.groupby('SHOT_TYPE')['SHOT_MADE_FLAG'].mean()*100
+
+Master_File["PLAYER_NAME_ID"] = Master_File["PLAYER_NAME"] + "_" + Master_File["PLAYER_ID"].astype(str)
+shot_percent_by_player = Master_File.groupby('PLAYER_NAME_ID')['SHOT_MADE_FLAG'].mean()*100
+
+attempts = Master_File.groupby('PLAYER_NAME_ID')['SHOT_ATTEMPTED_FLAG'].sum()
+
+player_data = pd.concat([shot_percent_by_player, attempts], axis=1)
+player_data.columns = ['shot_percent', 'attempts']
+player_data = player_data[player_data['attempts'] > 1000]
+
+print(player_data.head(10))
